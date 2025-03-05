@@ -14,7 +14,7 @@ This is a TypeScript template for a Node.js project using the Express framework 
 
 The project includes code for user login, signup, logout, creating, updating, and deleting tweets with user feed management.
 
-## Project Structure
+## Project Structure  
 
 - src
   - config

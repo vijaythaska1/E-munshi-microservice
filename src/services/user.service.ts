@@ -1,6 +1,9 @@
-import * as httpStatus from "http-status";
+import httpStatus from "http-status";
+import { IUser } from "../models/user_model/user.interface";
 import User from "../models/user_model/user.model";
+
 import ApiError from "../utils/ApiError";
+import { ObjectId } from "mongoose";
 
 /**
  * Create a user
@@ -8,7 +11,7 @@ import ApiError from "../utils/ApiError";
  * @returns {Promise<User>}
  */
 
-const createUser = async (userBody) => {
+const createUser = async (userBody: any): Promise<IUser> => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
   } else if (await User.isUsernameTaken(userBody.userName)) {
@@ -23,7 +26,7 @@ const createUser = async (userBody) => {
  * @param {ObjectId} id
  * @returns {Promise<User>}
  */
-const getUserById = async (id) => {
+const getUserById = async (id: ObjectId): Promise<IUser> => {
   return User.findById(id).lean();
 };
 
@@ -32,11 +35,12 @@ const getUserById = async (id) => {
  * @param {string} email
  * @returns {Promise<User>}
  */
-const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+const getUserByEmail = async (email: string): Promise<IUser> => {
+  const data: any = User.findOne({ email });
+  return data;
 };
 
-const getUserByAddress = async (address) => {
+const getUserByAddress = async (address: any) => {
   return User.findOne({ address }).lean();
 };
 
@@ -46,20 +50,19 @@ const getUserByAddress = async (address) => {
  * @param {Object} updateBody
  * @returns {Promise<User>}
  */
-const updateUserById = async (userId, updateBody) => {
-  const user = await User.findByIdAndUpdate(userId, updateBody, {
+const updateUserById = async (userId: ObjectId, updateBody: object): Promise<IUser> => {
+  const user: any = await User.findByIdAndUpdate(userId, updateBody, {
     new: true,
   }).lean();
-
   return user;
 };
 
 /**
  * Delete user by id
  * @param {ObjectId} userId
- * @returns {Promise<User>}
+ * @returns {Promise<string>}
  */
-const deleteUserById = async (userId) => {
+const deleteUserById = async (userId: ObjectId): Promise<string> => {
   const user = await getUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
@@ -68,10 +71,10 @@ const deleteUserById = async (userId) => {
   return "user deleted successfully";
 };
 
-const searchUsersByName = async (keyword, page, perPage) => {
+const searchUsersByName = async (keyword: any, page: number, perPage: string | number) => {
   return await User.find({ userName: { $regex: keyword, $options: "i" } })
-    .limit(parseInt(perPage))
-    .skip(page * perPage);
+    .limit(parseInt(perPage.toString()))
+    .skip(page * Number(perPage));
 };
 
 export {

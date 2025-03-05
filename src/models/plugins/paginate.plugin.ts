@@ -19,10 +19,10 @@ const paginate = schema => {
    * @param {number} [options.page] - Current page (default = 1)
    * @returns {Promise<QueryResult>}
    */
-  schema.statics.paginate = async function (filter, options) {
+  schema.statics.paginate = async function (filter:Object, options: { sortBy: string; limit: string; page: string; populate: string; }): Promise<Object> {
     let sort = "";
     if (options.sortBy) {
-      const sortingCriteria = [];
+      const sortingCriteria: string[] = [];
       options.sortBy.split(",").forEach(sortOption => {
         const [key, order] = sortOption.split(":");
         sortingCriteria.push((order === "desc" ? "-" : "") + key);
@@ -51,7 +51,7 @@ const paginate = schema => {
           populateOption
             .split(".")
             .reverse()
-            .reduce((a, b) => ({ path: b, populate: a }))
+            .reduce((a, b) => `${b}.${a}`)
         );
       });
     }

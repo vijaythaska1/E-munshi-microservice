@@ -1,6 +1,5 @@
 import httpStatus from "http-status";
 import ApiError from "./utils/ApiError";
-// ES6 import syntax
 import express from "express";
 import helmet from "helmet";
 import xss from "xss-clean";
@@ -42,6 +41,7 @@ app.use(
   })
 );
 
+
 app.use(xss());
 app.use(mongoSanitize());
 
@@ -65,7 +65,7 @@ passport.use("jwt", jwtStrategy);
 app.use("/v1", routes);
 
 // send back a 404 error for any unknown api request
-app.use(( next: any) => {
+app.use(( next: express.NextFunction) => {
   next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 });
 

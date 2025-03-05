@@ -9,10 +9,7 @@ const defaultRoutes = [
     path: "/auth",
     route: authRoute,
   },
-  // {
-  //   path: "/tweet",
-  //   route: tweetRoute,
-  // },
+ 
 ];
 
 const devRoutes = [];

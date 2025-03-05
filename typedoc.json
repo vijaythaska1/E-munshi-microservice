@@ -1,0 +1,7 @@
+{
+  "entryPoints": ["src/app.ts"],
+  "out": "docs",
+  "exclude": ["node_modules"],
+  "excludeExternals": true,
+  "readme": "./README.md"
+}

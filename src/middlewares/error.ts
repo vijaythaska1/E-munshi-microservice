@@ -6,8 +6,10 @@ import mongoose from "mongoose";
 import httpStatus from "http-status";
 import { Request, Response, NextFunction } from "express";
 
-const errorConverter = (err: any, next: NextFunction): void => {
+const errorConverter = (err: any, req: Request, res: Response, next: NextFunction): void => {
   let error = err;
+  console.log(req, res);
+  
   if (!(error instanceof ApiError)) {
     const statusCode =
       error.statusCode || error instanceof mongoose.Error
@@ -19,10 +21,10 @@ const errorConverter = (err: any, next: NextFunction): void => {
   next(error);
 };
 
-const errorHandler = (err: ApiError, _: Request, res: Response, ): void => {
+const errorHandler = (err, res: Response): void => {
   let { statusCode, message } = err;
 
-  console.log("🚀 ~ file: error.ts:24 ~ errorHandler ~ message:", message);
+  // console.log("🚀 ~ file: error.ts:24 ~ errorHandler ~ message:", message);
   if (config.env === "production" && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR] as string;

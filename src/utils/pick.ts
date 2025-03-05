@@ -4,8 +4,12 @@
  * @param {string[]} keys
  * @returns {Object}
  */
-const pick = (object, keys) => {
-  return keys.reduce((obj, key) => {
+interface AnyObject {
+  [key: string]: any;
+}
+
+const pick = (object: AnyObject, keys: string[]): AnyObject => {
+  return keys.reduce((obj: AnyObject, key: string) => {
     if (object && Object.prototype.hasOwnProperty.call(object, key)) {
       // eslint-disable-next-line no-param-reassign
       obj[key] = object[key];

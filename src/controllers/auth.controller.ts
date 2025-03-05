@@ -1,8 +1,9 @@
-import * as httpStatus from "http-status";
+import httpStatus from "http-status";
 import catchAsync from "../utils/catchAsync";
 import { createUser, getUserByEmail } from "../services/user.service";
 import { generateAuthTokens, removeToken } from "../services/token.service";
 import { Request, Response } from "express";
+import { IUser } from "../models/user_model/user.interface";
 
 
 const register = catchAsync(async (req: Request, res: Response): Promise<void> => {
@@ -36,7 +37,7 @@ const login = catchAsync(async (req: Request, res: Response): Promise<void> => {
 
 const logout = catchAsync(async (req: Request, res: Response): Promise<void> => {
   const user = req.user!;
-  await removeToken(user);
+  await removeToken(user as IUser);
   res.status(httpStatus.OK).send({
     message: "logout successful",
     status: true,

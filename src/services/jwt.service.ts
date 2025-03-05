@@ -15,8 +15,14 @@ const { tokenTypes } = require("../config/tokens");
  * @param {string} [secret]
  * @returns {string}
  */
-const generateToken = (userId, type, secret = config.jwt.secret) => {
-  const payload = {
+interface IGenerateTokenParams {
+  userId: string;
+  type: string;
+  secret?: string;
+}
+
+const generateToken = ({ userId, type, secret = config.jwt.secret }: IGenerateTokenParams): string => {
+  const payload: ITokenPayload = {
     sub: userId,
     iat: moment().unix(),
     type,
@@ -33,7 +39,20 @@ const generateToken = (userId, type, secret = config.jwt.secret) => {
  * @param {boolean} [blacklisted]
  * @returns {Promise<Token>}
  */
-const saveToken = async (token, userId, type, blacklisted = false) => {
+interface ITokenPayload {
+  sub: string;
+  iat: number;
+  type: string;
+}
+
+interface ISaveTokenParams {
+  token: string;
+  userId: string;
+  type: string;
+  blacklisted?: boolean;
+}
+
+const saveToken = async ({ token, userId, type, blacklisted = false }: ISaveTokenParams): Promise<typeof Token> => {
   const tokenDoc = await Token.create({
     token,
     user: userId,
@@ -49,8 +68,13 @@ const saveToken = async (token, userId, type, blacklisted = false) => {
  * @param {string} type
  * @returns {Promise<Token>}
  */
-const verifyToken = async (token, type) => {
-  const payload = jwt.verify(token, config.jwt.secret);
+interface IVerifyTokenParams {
+  token: string;
+  type: string;
+}
+
+const verifyToken = async ({ token, type }: IVerifyTokenParams): Promise<typeof Token> => {
+  const payload = jwt.verify(token, config.jwt.secret) as ITokenPayload;
   const tokenDoc = await Token.findOne({
     token,
     type,
@@ -63,14 +87,20 @@ const verifyToken = async (token, type) => {
   return tokenDoc;
 };
 
-/**
+/**IGenerateAuthTokensParams
  * Generate auth tokens
  * @param {User} user
  * @returns {Promise<Object>}
  */
-const generateAuthTokens = async user => {
-  const accessToken = generateToken(user._id, tokenTypes.ACCESS);
-  await saveToken(accessToken, user._id, tokenTypes.ACCESS);
+interface IGenerateAuthTokensParams {
+  user: {
+    _id: string;
+  };
+}
+
+const generateAuthTokens = async ({ user }: IGenerateAuthTokensParams): Promise<string> => {
+  const accessToken = generateToken({ userId: user._id, type: tokenTypes.ACCESS });
+  await saveToken({ token: accessToken, userId: user._id, type: tokenTypes.ACCESS });
   return accessToken;
 };
 
@@ -84,21 +114,21 @@ const generateResetPasswordToken = async email => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "No users found with this email");
   }
-  const expires = moment().add(
+  moment().add(
     config.jwt.resetPasswordExpirationMinutes,
     "minutes"
   );
-  const resetPasswordToken = generateToken(
-    user.id,
-    expires,
-    tokenTypes.RESET_PASSWORD
-  );
-  await saveToken(
-    resetPasswordToken,
-    user.id,
-    expires,
-    tokenTypes.RESET_PASSWORD
-  );
+  const resetPasswordToken = generateToken({
+    userId: user.id,
+    type: tokenTypes.RESET_PASSWORD,
+    secret: config.jwt.secret,
+  });
+  await saveToken({
+    token: resetPasswordToken,
+    userId: user.id,
+    type: tokenTypes.RESET_PASSWORD,
+    blacklisted: false,
+  });
   return resetPasswordToken;
 };
 
@@ -107,21 +137,32 @@ const generateResetPasswordToken = async email => {
  * @param {User} user
  * @returns {Promise<string>}
  */
-const generateVerifyEmailToken = async user => {
-  const expires = moment().add(
+interface IGenerateVerifyEmailTokenParams {
+  user: {
+    id: string;
+  };
+}
+
+const generateVerifyEmailToken = async ({ user }: IGenerateVerifyEmailTokenParams): Promise<string> => {
+  moment().add(
     config.jwt.verifyEmailExpirationMinutes,
     "minutes"
   );
-  const verifyEmailToken = generateToken(
-    user.id,
-    expires,
-    tokenTypes.VERIFY_EMAIL
-  );
-  await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
+  const verifyEmailToken = generateToken({
+    userId: user.id,
+    type: tokenTypes.VERIFY_EMAIL,
+    secret: config.jwt.secret,
+  });
+  await saveToken({
+    token: verifyEmailToken,
+    userId: user.id,
+    type: tokenTypes.VERIFY_EMAIL,
+    blacklisted: false,
+  });
   return verifyEmailToken;
 };
 
-const removeToken = async user => {
+const removeToken = async (user: { id: any; }) => {
   let res = await Token.findOneAndDelete({ user: user.id });
   return res;
 };
