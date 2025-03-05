@@ -13,12 +13,25 @@
     "build": "swc src -d dist",
     "build:prod": "NODE_ENV=production swc src -d dist",
     "build:type": "tsc --build",
-    "prebuild": "npm run clean && npm run type-check"
+    "prebuild": "npm run clean && npm run type-check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint 'src/**/*.{js,ts}'",
+    "lint:fix": "eslint 'src/**/*.{js,ts}' --fix",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
     "@faker-js/faker": "^7.6.0",
     "@microsoft/tsdoc": "^0.15.1",
     "@swc-node/register": "^1.10.9",
@@ -34,11 +47,17 @@
     "@types/node": "^18.19.79",
     "@types/passport": "^1.0.17",
     "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
     "chai": "^4.3.7",
     "chai-http": "^4.3.0",
+    "eslint": "^9.21.0",
     "eslint-plugin-tsdoc": "^0.4.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.4.3",
     "mocha": "^10.2.0",
     "nodemon": "^3.1.9",
+    "prettier": "^3.5.3",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.2",
     "tsdoc": "^0.0.4",

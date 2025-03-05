@@ -1,7 +1,12 @@
-import User from "../models/user_model/user.model";
-import config from "./config";
-import { tokenTypes } from "./tokens";
-import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions, VerifiedCallback } from "passport-jwt";
+import User from '../models/user_model/user.model';
+import config from './config';
+import { tokenTypes } from './tokens';
+import {
+  Strategy as JwtStrategy,
+  ExtractJwt,
+  StrategyOptions,
+  VerifiedCallback,
+} from 'passport-jwt';
 
 interface JwtPayload {
   sub: string;
@@ -16,7 +21,7 @@ const jwtOptions: StrategyOptions = {
 const jwtVerify = async (payload: JwtPayload, done: VerifiedCallback) => {
   try {
     if (payload.type !== tokenTypes.ACCESS) {
-      throw new Error("Invalid token type");
+      throw new Error('Invalid token type');
     }
     const user = await User.findById(payload.sub);
     if (!user) {

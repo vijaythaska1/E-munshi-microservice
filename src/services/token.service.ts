@@ -1,16 +1,16 @@
-import * as httpStatus from "http-status";
-import * as jwt from "jsonwebtoken";
-import moment from "moment";
-import config from "../config/config";
+import * as httpStatus from 'http-status';
+import * as jwt from 'jsonwebtoken';
+import moment from 'moment';
+import config from '../config/config';
 
-import  { IToken } from "../models/token_model/token.interface";
-import   Token  from "../models/token_model/token.model";
+import { IToken } from '../models/token_model/token.interface';
+import Token from '../models/token_model/token.model';
 
-import ApiError from "../utils/ApiError";
-import * as userService from "./user.service";
-import { ObjectId } from "mongoose";
-import { IUser } from "../models/user_model/user.interface";
-const { tokenTypes } = require("../config/tokens");
+import ApiError from '../utils/ApiError';
+import * as userService from './user.service';
+import { ObjectId } from 'mongoose';
+import { IUser } from '../models/user_model/user.interface';
+const { tokenTypes } = require('../config/tokens');
 
 interface GenerateTokenPayload {
   sub: string;
@@ -25,7 +25,11 @@ interface GenerateTokenPayload {
  * @param {string} [secret]
  * @returns {string}
  */
-const generateToken = (userId: string, type: string, secret: string = config.jwt.secret): string => {
+const generateToken = (
+  userId: string,
+  type: string,
+  secret: string = config.jwt.secret
+): string => {
   const payload: GenerateTokenPayload = {
     sub: userId,
     iat: moment().unix(),
@@ -43,7 +47,13 @@ const generateToken = (userId: string, type: string, secret: string = config.jwt
  * @param {boolean} [blacklisted]
  * @returns {Promise<Token>}
  */
-const saveToken = async (token: string, userId: ObjectId, expires: Date, type: string, blacklisted: boolean = false): Promise<IToken> => {
+const saveToken = async (
+  token: string,
+  userId: ObjectId,
+  expires: Date,
+  type: string,
+  blacklisted: boolean = false
+): Promise<IToken> => {
   const tokenDoc = await Token.create({
     token,
     user: userId,
@@ -63,7 +73,7 @@ const saveToken = async (token: string, userId: ObjectId, expires: Date, type: s
 const verifyToken = async (token: string, type: string): Promise<IToken> => {
   const payload = jwt.verify(token, config.jwt.secret) as jwt.JwtPayload;
   if (!payload.sub) {
-    throw new Error("Invalid token payload");
+    throw new Error('Invalid token payload');
   }
 
   const tokenDoc = await Token.findOne({
@@ -74,7 +84,7 @@ const verifyToken = async (token: string, type: string): Promise<IToken> => {
   });
 
   if (!tokenDoc) {
-    throw new Error("Token not found");
+    throw new Error('Token not found');
   }
   return tokenDoc;
 };
@@ -84,9 +94,13 @@ const verifyToken = async (token: string, type: string): Promise<IToken> => {
  * @param {User} user
  * @returns {Promise<Object>}
  */
-const generateAuthTokens = async (user: IUser): Promise<{ accessToken: string }> => {
+const generateAuthTokens = async (
+  user: IUser
+): Promise<{ accessToken: string }> => {
   const accessToken = generateToken(user._id.toString(), tokenTypes.ACCESS);
-  const expires = moment().add(config.jwt.accessExpirationMinutes, 'minutes').toDate();
+  const expires = moment()
+    .add(config.jwt.accessExpirationMinutes, 'minutes')
+    .toDate();
   await saveToken(accessToken, user._id, expires, tokenTypes.ACCESS);
   return { accessToken };
 };
@@ -99,11 +113,11 @@ const generateAuthTokens = async (user: IUser): Promise<{ accessToken: string }>
 const generateResetPasswordToken = async (email: string): Promise<string> => {
   const user = await userService.getUserByEmail(email);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "No users found with this email");
+    throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this email');
   }
   const expires = moment().add(
     config.jwt.resetPasswordExpirationMinutes,
-    "minutes"
+    'minutes'
   );
   const resetPasswordToken = generateToken(
     user.id,
@@ -127,14 +141,19 @@ const generateResetPasswordToken = async (email: string): Promise<string> => {
 const generateVerifyEmailToken = async (user: IUser): Promise<string> => {
   const expires = moment().add(
     config.jwt.verifyEmailExpirationMinutes,
-    "minutes"
+    'minutes'
   );
   const verifyEmailToken = generateToken(
     user.id,
     tokenTypes.VERIFY_EMAIL,
     config.jwt.secret
   );
-  await saveToken(verifyEmailToken, user.id, expires.toDate(), tokenTypes.VERIFY_EMAIL);
+  await saveToken(
+    verifyEmailToken,
+    user.id,
+    expires.toDate(),
+    tokenTypes.VERIFY_EMAIL
+  );
   return verifyEmailToken;
 };
 

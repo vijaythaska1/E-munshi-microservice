@@ -1,7 +1,7 @@
-import { model, Schema } from "mongoose";
-import { tokenTypes } from "../../config/tokens";
-import { toJSON } from "../plugins";
-import { IToken } from "./token.interface"
+import { model, Schema } from 'mongoose';
+import { tokenTypes } from '../../config/tokens';
+import { toJSON } from '../plugins';
+import { IToken } from './token.interface';
 
 const tokenSchema = new Schema<IToken>(
   {
@@ -12,7 +12,7 @@ const tokenSchema = new Schema<IToken>(
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     type: {
@@ -41,6 +41,6 @@ const tokenSchema = new Schema<IToken>(
 // add plugin that converts mongoose to json
 tokenSchema.plugin(toJSON);
 
-const Token = model<IToken>("Token", tokenSchema);
+const Token = model<IToken>('Token', tokenSchema);
 
 export default Token;

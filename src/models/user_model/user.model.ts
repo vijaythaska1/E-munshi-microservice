@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
-import validator from "validator";
-import bcrypt from "bcryptjs";
-import { toJSON, paginate } from "../plugins";
-import { roles } from "../../config/roles";
+import mongoose from 'mongoose';
+import validator from 'validator';
+import bcrypt from 'bcryptjs';
+import { toJSON, paginate } from '../plugins';
+import { roles } from '../../config/roles';
 // import { UNAVAILABLE_FOR_LEGAL_REASONS } from "http-status";
-import { IUser, UserModel } from "./user.interface"
+import { IUser, UserModel } from './user.interface';
 
 const userSchema = new mongoose.Schema<IUser, UserModel>(
   {
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel>(
       lowercase: true,
       validate(value: string) {
         if (!validator.isEmail(value)) {
-          throw new Error("Invalid email");
+          throw new Error('Invalid email');
         }
       },
     },
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel>(
     role: {
       type: String,
       enum: roles,
-      default: "user",
+      default: 'user',
     },
   },
   {
@@ -72,14 +72,14 @@ userSchema.methods.isPasswordMatch = async function (password: string) {
   return bcrypt.compare(password, user.password);
 };
 
-userSchema.pre<IUser>("save", async function (next) {
+userSchema.pre<IUser>('save', async function (next) {
   const user = this;
-  if (user.isModified("password")) {
+  if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();
 });
 
-const User = mongoose.model<IUser, UserModel>("User", userSchema);
+const User = mongoose.model<IUser, UserModel>('User', userSchema);
 
 export default User;

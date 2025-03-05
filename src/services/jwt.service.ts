@@ -1,11 +1,11 @@
-import jwt from "jsonwebtoken";
-import moment from "moment";
-import ApiError from "../utils/ApiError";
-import httpStatus from "http-status";
-const userService = require("./user.service");
-const config = require("../config/config");
-const { Token } = require("../models");
-const { tokenTypes } = require("../config/tokens");
+import jwt from 'jsonwebtoken';
+import moment from 'moment';
+import ApiError from '../utils/ApiError';
+import httpStatus from 'http-status';
+const userService = require('./user.service');
+const config = require('../config/config');
+const { Token } = require('../models');
+const { tokenTypes } = require('../config/tokens');
 
 /**
  * Generate token
@@ -21,7 +21,11 @@ interface IGenerateTokenParams {
   secret?: string;
 }
 
-const generateToken = ({ userId, type, secret = config.jwt.secret }: IGenerateTokenParams): string => {
+const generateToken = ({
+  userId,
+  type,
+  secret = config.jwt.secret,
+}: IGenerateTokenParams): string => {
   const payload: ITokenPayload = {
     sub: userId,
     iat: moment().unix(),
@@ -52,7 +56,12 @@ interface ISaveTokenParams {
   blacklisted?: boolean;
 }
 
-const saveToken = async ({ token, userId, type, blacklisted = false }: ISaveTokenParams): Promise<typeof Token> => {
+const saveToken = async ({
+  token,
+  userId,
+  type,
+  blacklisted = false,
+}: ISaveTokenParams): Promise<typeof Token> => {
   const tokenDoc = await Token.create({
     token,
     user: userId,
@@ -73,7 +82,10 @@ interface IVerifyTokenParams {
   type: string;
 }
 
-const verifyToken = async ({ token, type }: IVerifyTokenParams): Promise<typeof Token> => {
+const verifyToken = async ({
+  token,
+  type,
+}: IVerifyTokenParams): Promise<typeof Token> => {
   const payload = jwt.verify(token, config.jwt.secret) as ITokenPayload;
   const tokenDoc = await Token.findOne({
     token,
@@ -82,7 +94,7 @@ const verifyToken = async ({ token, type }: IVerifyTokenParams): Promise<typeof 
     blacklisted: false,
   });
   if (!tokenDoc) {
-    throw new Error("Token not found");
+    throw new Error('Token not found');
   }
   return tokenDoc;
 };
@@ -98,9 +110,18 @@ interface IGenerateAuthTokensParams {
   };
 }
 
-const generateAuthTokens = async ({ user }: IGenerateAuthTokensParams): Promise<string> => {
-  const accessToken = generateToken({ userId: user._id, type: tokenTypes.ACCESS });
-  await saveToken({ token: accessToken, userId: user._id, type: tokenTypes.ACCESS });
+const generateAuthTokens = async ({
+  user,
+}: IGenerateAuthTokensParams): Promise<string> => {
+  const accessToken = generateToken({
+    userId: user._id,
+    type: tokenTypes.ACCESS,
+  });
+  await saveToken({
+    token: accessToken,
+    userId: user._id,
+    type: tokenTypes.ACCESS,
+  });
   return accessToken;
 };
 
@@ -109,15 +130,12 @@ const generateAuthTokens = async ({ user }: IGenerateAuthTokensParams): Promise<
  * @param {string} email
  * @returns {Promise<string>}
  */
-const generateResetPasswordToken = async email => {
+const generateResetPasswordToken = async (email) => {
   const user = await userService.getUserByEmail(email);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "No users found with this email");
+    throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this email');
   }
-  moment().add(
-    config.jwt.resetPasswordExpirationMinutes,
-    "minutes"
-  );
+  moment().add(config.jwt.resetPasswordExpirationMinutes, 'minutes');
   const resetPasswordToken = generateToken({
     userId: user.id,
     type: tokenTypes.RESET_PASSWORD,
@@ -143,11 +161,10 @@ interface IGenerateVerifyEmailTokenParams {
   };
 }
 
-const generateVerifyEmailToken = async ({ user }: IGenerateVerifyEmailTokenParams): Promise<string> => {
-  moment().add(
-    config.jwt.verifyEmailExpirationMinutes,
-    "minutes"
-  );
+const generateVerifyEmailToken = async ({
+  user,
+}: IGenerateVerifyEmailTokenParams): Promise<string> => {
+  moment().add(config.jwt.verifyEmailExpirationMinutes, 'minutes');
   const verifyEmailToken = generateToken({
     userId: user.id,
     type: tokenTypes.VERIFY_EMAIL,
@@ -162,7 +179,7 @@ const generateVerifyEmailToken = async ({ user }: IGenerateVerifyEmailTokenParam
   return verifyEmailToken;
 };
 
-const removeToken = async (user: { id: any; }) => {
+const removeToken = async (user: { id: any }) => {
   let res = await Token.findOneAndDelete({ user: user.id });
   return res;
 };

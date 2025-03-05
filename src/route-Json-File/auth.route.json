@@ -1,21 +1,20 @@
 [
-    {
-      "path": "/register",
-      "method": "post",
-      "middlewares": ["validate:authValidation.register"],
-      "handler": "register"
-    },
-    {
-      "path": "/login",
-      "method": "post",
-      "middlewares": ["validate:authValidation.login"],
-      "handler": "login"
-    },
-    {
-      "path": "/logout",
-      "method": "post",
-      "middlewares": ["auth:logout"],
-      "handler": "logout"
-    }
-  ]
-  
+  {
+    "path": "/register",
+    "method": "post",
+    "middlewares": ["validate:authValidation.register"],
+    "handler": "register"
+  },
+  {
+    "path": "/login",
+    "method": "post",
+    "middlewares": ["validate:authValidation.login"],
+    "handler": "login"
+  },
+  {
+    "path": "/logout",
+    "method": "post",
+    "middlewares": ["auth:logout"],
+    "handler": "logout"
+  }
+]

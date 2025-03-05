@@ -14,7 +14,7 @@ This is a TypeScript template for a Node.js project using the Express framework 
 
 The project includes code for user login, signup, logout, creating, updating, and deleting tweets with user feed management.
 
-## Project Structure  
+## Project Structure
 
 - src
   - config
@@ -56,6 +56,7 @@ The project includes code for user login, signup, logout, creating, updating, an
     - tweet.validation.ts
 
 # Setup
+
 - Clone this repository.
 - Run npm install to install all dependencies.
 - Create a .env file in the root directory and add your environment variables (refer to config/config.ts for required variables).
@@ -65,14 +66,17 @@ The project includes code for user login, signup, logout, creating, updating, an
 # Usage
 
 ## Routes
+
 All routes are defined in the routes folder. There are currently two routes: auth and tweet.
 
 Auth Routes
+
 - POST /auth/signup: creates a new user.
 - POST /auth/login: logs in an existing user.
 - POST /auth/logout: logs out the currently logged in user.
 
 Tweet Routes
+
 - GET /tweets: gets all tweets.
 - GET /tweets/:id: gets a single tweet by ID.
 - POST /tweets: creates a new tweet.
@@ -80,17 +84,21 @@ Tweet Routes
 - DELETE /tweets/:id: deletes an existing tweet by ID.
 
 ## Authentication
+
 All routes except for POST /auth/signup and POST /auth/login require authentication. Authentication is done using Passport JWT and the Auth middleware in the middlewares folder.
 
 ## Validation
+
 All request bodies, query parameters, and URL parameters are validated using the Validate middleware in the middlewares folder.
 
 ## Rate Limiting
+
 API rate limiting is implemented using the rateLimiter middleware in the middlewares folder.
 
 ## Response Management
+
 All responses are managed using the Error and Success middlewares in the middlewares folder.
 
 ## Tests
-Tests are written using Chai and can be found in tests folder.
 
+Tests are written using Chai and can be found in tests folder.

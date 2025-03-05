@@ -1,9 +1,9 @@
-import httpStatus from "http-status";
-import { IUser } from "../models/user_model/user.interface";
-import User from "../models/user_model/user.model";
+import httpStatus from 'http-status';
+import { IUser } from '../models/user_model/user.interface';
+import User from '../models/user_model/user.model';
 
-import ApiError from "../utils/ApiError";
-import { ObjectId } from "mongoose";
+import ApiError from '../utils/ApiError';
+import { ObjectId } from 'mongoose';
 
 /**
  * Create a user
@@ -13,9 +13,9 @@ import { ObjectId } from "mongoose";
 
 const createUser = async (userBody: any): Promise<IUser> => {
   if (await User.isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   } else if (await User.isUsernameTaken(userBody.userName)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "userName already taken");
+    throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
   }
   const usr = await User.create(userBody);
   return usr.toObject();
@@ -50,7 +50,10 @@ const getUserByAddress = async (address: any) => {
  * @param {Object} updateBody
  * @returns {Promise<User>}
  */
-const updateUserById = async (userId: ObjectId, updateBody: object): Promise<IUser> => {
+const updateUserById = async (
+  userId: ObjectId,
+  updateBody: object
+): Promise<IUser> => {
   const user: any = await User.findByIdAndUpdate(userId, updateBody, {
     new: true,
   }).lean();
@@ -65,14 +68,18 @@ const updateUserById = async (userId: ObjectId, updateBody: object): Promise<IUs
 const deleteUserById = async (userId: ObjectId): Promise<string> => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   await User.deleteOne({ _id: userId });
-  return "user deleted successfully";
+  return 'user deleted successfully';
 };
 
-const searchUsersByName = async (keyword: any, page: number, perPage: string | number) => {
-  return await User.find({ userName: { $regex: keyword, $options: "i" } })
+const searchUsersByName = async (
+  keyword: any,
+  page: number,
+  perPage: string | number
+) => {
+  return await User.find({ userName: { $regex: keyword, $options: 'i' } })
     .limit(parseInt(perPage.toString()))
     .skip(page * Number(perPage));
 };

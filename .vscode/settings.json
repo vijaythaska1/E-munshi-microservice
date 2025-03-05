@@ -1,0 +1,36 @@
+{
+  "editor.tabSize": 2, // Set tab size to 2 spaces
+  "editor.insertSpaces": true, // Convert tabs to spaces
+  "editor.formatOnSave": true, // Auto format on save
+  "editor.formatOnPaste": true, // Auto format on paste
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true, // Auto-fix ESLint errors on save
+    "source.organizeImports": true // Auto-organize imports
+  },
+  "files.autoSave": "onFocusChange", // Auto-save files when switching focus
+  "files.trimTrailingWhitespace": true, // Remove trailing spaces on save
+  "files.insertFinalNewline": true, // Ensure file ends with a newline
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript"
+  ], // Enable ESLint for JS & TS
+  "prettier.singleQuote": true, // Use single quotes in Prettier
+  "prettier.trailingComma": "all", // Add trailing commas where valid
+  "prettier.printWidth": 100, // Set max line width
+  "prettier.tabWidth": 2, // Match Prettier tab size with editor
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true, // Enable TS diagnostics
+  "terminal.integrated.shell.linux": "/bin/bash", // Default shell for Linux
+  "workbench.colorTheme": "Default Dark+", // Set default VS Code theme
+  "git.autofetch": true, // Auto-fetch Git changes
+  "git.confirmSync": false, // Disable Git sync confirmation
+  "git.enableSmartCommit": true, // Auto-stage changes before commit
+  "gitlens.hovers.enabled": true, // Enable GitLens hovers
+  "debug.console.fontSize": 14 // Set console font size
+}

@@ -1,15 +1,14 @@
-import config from "../../config/config";
-import authRoute from "./auth.route";
-const express = require("express");
+import config from '../../config/config';
+import authRoute from './auth.route';
+const express = require('express');
 
 const router = express.Router();
 
 const defaultRoutes = [
   {
-    path: "/auth",
+    path: '/auth',
     route: authRoute,
   },
- 
 ];
 
 const devRoutes = [];
@@ -19,7 +18,7 @@ defaultRoutes.forEach((route) => {
 });
 
 /* istanbul ignore next */
-if (config.env === "development") {
+if (config.env === 'development') {
   devRoutes.forEach((route: any) => {
     router.use(route.path, route.route);
   });

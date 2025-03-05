@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-const paginate = schema => {
+const paginate = (schema) => {
   /**
    * @typedef {Object} QueryResult
    * @property {Document[]} results - Results found
@@ -19,17 +19,20 @@ const paginate = schema => {
    * @param {number} [options.page] - Current page (default = 1)
    * @returns {Promise<QueryResult>}
    */
-  schema.statics.paginate = async function (filter:Object, options: { sortBy: string; limit: string; page: string; populate: string; }): Promise<Object> {
-    let sort = "";
+  schema.statics.paginate = async function (
+    filter: Object,
+    options: { sortBy: string; limit: string; page: string; populate: string }
+  ): Promise<Object> {
+    let sort = '';
     if (options.sortBy) {
       const sortingCriteria: string[] = [];
-      options.sortBy.split(",").forEach(sortOption => {
-        const [key, order] = sortOption.split(":");
-        sortingCriteria.push((order === "desc" ? "-" : "") + key);
+      options.sortBy.split(',').forEach((sortOption) => {
+        const [key, order] = sortOption.split(':');
+        sortingCriteria.push((order === 'desc' ? '-' : '') + key);
       });
-      sort = sortingCriteria.join(" ");
+      sort = sortingCriteria.join(' ');
     } else {
-      sort = "createdAt";
+      sort = 'createdAt';
     }
 
     const limit =
@@ -46,10 +49,10 @@ const paginate = schema => {
     let docsPromise = this.find(filter).sort(sort).skip(skip).limit(limit);
 
     if (options.populate) {
-      options.populate.split(",").forEach(populateOption => {
+      options.populate.split(',').forEach((populateOption) => {
         docsPromise = docsPromise.populate(
           populateOption
-            .split(".")
+            .split('.')
             .reverse()
             .reduce((a, b) => `${b}.${a}`)
         );
@@ -58,7 +61,7 @@ const paginate = schema => {
 
     docsPromise = docsPromise.exec();
 
-    return Promise.all([countPromise, docsPromise]).then(values => {
+    return Promise.all([countPromise, docsPromise]).then((values) => {
       const [totalResults, results] = values;
       const totalPages = Math.ceil(totalResults / limit);
       const result = {

@@ -1,17 +1,16 @@
 {
-    "jsc": {
-      "parser": {
-        "syntax": "typescript",
-        "tsx": false
-      },
-      "target": "es2020",
-      "minify": {
-        "compress": true,
-        "mangle": true
-      }
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false
     },
-    "module": {
-      "type": "commonjs"  
+    "target": "es2020",
+    "minify": {
+      "compress": true,
+      "mangle": true
     }
+  },
+  "module": {
+    "type": "commonjs"
   }
-  
+}

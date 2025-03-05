@@ -1,5 +1,5 @@
-import winston from "winston";
-const enumerateErrorFormat = winston.format(info => {
+import winston from 'winston';
+const enumerateErrorFormat = winston.format((info) => {
   if (info instanceof Error) {
     Object.assign(info, { message: info.stack });
   }
@@ -7,7 +7,7 @@ const enumerateErrorFormat = winston.format(info => {
 });
 
 const logger = winston.createLogger({
-  level: "info",
+  level: 'info',
   format: winston.format.combine(
     enumerateErrorFormat(),
     winston.format.uncolorize(),
@@ -16,7 +16,7 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console({
-      stderrLevels: ["error"],
+      stderrLevels: ['error'],
     }),
   ],
 });

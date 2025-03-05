@@ -1,10 +1,13 @@
 # Contributing Guidelines
+
 Thank you for considering contributing to this project! Before you get started, please take a moment to review these guidelines:
 
 ## Code of Conduct
+
 This project and its community follow the Contributor [Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/). By participating, you are expected to uphold this code. Please report any unacceptable behavior to the project maintainers.
 
 ## Getting Started
+
 To contribute to this project, please follow these steps:
 
 1. Fork the repository to your own GitHub account.
@@ -15,6 +18,7 @@ To contribute to this project, please follow these steps:
 6. Open a pull request from your forked repository to this repository.
 
 ## Guidelines
+
 - Please make sure your changes follow the existing code style and architecture.
 - Before submitting a pull request, please make sure your changes pass the existing tests and add any new tests that are relevant.
 - Pull requests should have a descriptive title and description that explains the changes being made.

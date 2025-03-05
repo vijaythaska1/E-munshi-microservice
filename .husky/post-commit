@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Commit details ko fetch karein
+commit_hash=$(git rev-parse HEAD)
+commit_message=$(git log -1 --pretty=%B)
+author_name=$(git log -1 --pretty="%an")
+author_email=$(git log -1 --pretty="%ae")
+commit_date=$(git log -1 --pretty="%cd" --date=iso)
+
+# Folder jisme commit save hoga
+SAVE_DIR=".git_commits"
+mkdir -p $SAVE_DIR
+
+# File ka naam (commit hash ke sath)
+FILENAME="$SAVE_DIR/${commit_hash}.txt"
+
+# File me commit details likhein
+echo "Commit Hash: $commit_hash" > $FILENAME
+echo "Author: $author_name <$author_email>" >> $FILENAME
+echo "Date: $commit_date" >> $FILENAME
+echo "Message: $commit_message" >> $FILENAME
+
+echo "✅ Commit saved in $FILENAME"

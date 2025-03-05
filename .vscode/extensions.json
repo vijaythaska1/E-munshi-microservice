@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+      "esbenp.prettier-vscode",         // Prettier - Code formatter
+      "dbaeumer.vscode-eslint",         // ESLint - Linting for JavaScript/TypeScript
+      "streetsidesoftware.code-spell-checker", // Spell Checker
+      "eamodio.gitlens",                // GitLens - Git enhancements
+      "gruntfuggly.todo-tree",          // TODO Highlighting
+      "ms-vscode.vscode-typescript-next", // Latest TypeScript features
+      "ms-azuretools.vscode-docker",    // Docker support
+      "christian-kohler.npm-intellisense", // NPM IntelliSense
+      "mikestead.dotenv",               // .env file syntax highlighting
+      "shardulm94.trailing-spaces",     // Remove trailing spaces
+      "editorconfig.editorconfig",      // EditorConfig support
+      "yzhang.markdown-all-in-one"      // Markdown enhancements
+    ]
+  }
+  
