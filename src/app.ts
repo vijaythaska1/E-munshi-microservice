@@ -74,9 +74,6 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-// app.listen(3000, () => {
-//   console.log('Server is running on port 3000');
-// });
 
 // module.exports = app;
 export { app };
