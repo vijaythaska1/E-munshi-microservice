@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -r @swc-node/register src/app.ts",
-    "dev": "nodemon --ext ts --watch src --exec \"node -r @swc-node/register src/app.ts\"",
+    "start": "node -r @swc-node/register src/index.ts",
+    "dev": "nodemon --ext ts --watch src --exec \"node -r @swc-node/register src/index.ts\"",
     "test": "mocha --require @swc-node/register 'tests/**/*.ts' --timeout 10000",
     "type-check": "tsc --noEmit",
     "docs": "typedoc",

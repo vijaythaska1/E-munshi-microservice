@@ -1,20 +1,20 @@
-import httpStatus from 'http-status';
-import ApiError from './utils/ApiError';
-import express from 'express';
-import helmet from 'helmet';
-import xss from 'xss-clean';
-import mongoSanitize from 'express-mongo-sanitize';
 import compression from 'compression';
 import cors from 'cors';
+import express from 'express';
+import mongoSanitize from 'express-mongo-sanitize';
+import helmet from 'helmet';
+import httpStatus from 'http-status';
 import passport from 'passport';
+import xss from 'xss-clean';
 import {
-  successHandler,
   errorHandler as morganErrorHandler,
+  successHandler,
 } from './config/morgan';
 import { jwtStrategy } from './config/passport';
+import ApiError from './utils/ApiError';
 // import { authLimiter } from "./middlewares/rateLimiter";
-import { errorConverter, errorHandler } from './middlewares/error';
 import { fileParser } from 'express-multipart-file-parser';
+import { errorConverter, errorHandler } from './middlewares/error';
 import routes from './routes/v1';
 
 const app = express();
@@ -73,6 +73,10 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+
+// app.listen(3000, () => {
+//   console.log('Server is running on port 3000');
+// });
 
 // module.exports = app;
 export { app };

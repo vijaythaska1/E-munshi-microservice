@@ -1,9 +1,9 @@
-import httpStatus from 'http-status';
-import catchAsync from '../utils/catchAsync';
-import { createUser, getUserByEmail } from '../services/user.service';
-import { generateAuthTokens, removeToken } from '../services/token.service';
 import { Request, Response } from 'express';
+import httpStatus from 'http-status';
 import { IUser } from '../models/user_model/user.interface';
+import { generateAuthTokens, removeToken } from '../services/token.service';
+import { createUser, getUserByEmail } from '../services/user.service';
+import catchAsync from '../utils/catchAsync';
 
 const register = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
@@ -48,4 +48,4 @@ const logout = catchAsync(
   }
 );
 
-export { register, login, logout };
+export { login, logout, register };

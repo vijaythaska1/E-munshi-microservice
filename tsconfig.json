@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "lib": ["ES6"],
+    "lib": [
+      "ES6"
+    ],
     "rootDir": "src",
     "outDir": "build",
     "strict": true,
@@ -17,6 +19,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "build"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
 }
