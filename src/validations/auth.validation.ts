@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import Joi from 'joi';
 const { password } = require('./custom.validation');
 
 const register = {

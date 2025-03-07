@@ -4,8 +4,8 @@
   "editor.formatOnSave": true, // Auto format on save
   "editor.formatOnPaste": true, // Auto format on paste
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true, // Auto-fix ESLint errors on save
-    "source.organizeImports": true // Auto-organize imports
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
   },
   "files.autoSave": "onFocusChange", // Auto-save files when switching focus
   "files.trimTrailingWhitespace": true, // Remove trailing spaces on save
@@ -32,5 +32,11 @@
   "git.confirmSync": false, // Disable Git sync confirmation
   "git.enableSmartCommit": true, // Auto-stage changes before commit
   "gitlens.hovers.enabled": true, // Enable GitLens hovers
-  "debug.console.fontSize": 14 // Set console font size
+  "debug.console.fontSize": 14,
+  "cSpell.words": [
+    "Aadhar",
+    "allsubscribe",
+    "Idby",
+    "prefs"
+  ] // Set console font size
 }

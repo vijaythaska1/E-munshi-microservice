@@ -1,9 +1,9 @@
 import httpStatus from 'http-status';
-import { IUser } from '../models/user_model/user.interface';
-import User from '../models/user_model/user.model';
+import { User } from '../models/index';
+import { IUser } from '../models/userModel/user.interface';
 
-import ApiError from '../utils/ApiError';
 import { ObjectId } from 'mongoose';
+import ApiError from '../utils/ApiError';
 
 /**
  * Create a user
@@ -14,8 +14,6 @@ import { ObjectId } from 'mongoose';
 const createUser = async (userBody: any): Promise<IUser> => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  } else if (await User.isUsernameTaken(userBody.userName)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
   }
   const usr = await User.create(userBody);
   return usr.toObject();
@@ -86,10 +84,10 @@ const searchUsersByName = async (
 
 export {
   createUser,
-  getUserById,
-  getUserByEmail,
-  updateUserById,
   deleteUserById,
   getUserByAddress,
+  getUserByEmail,
+  getUserById,
   searchUsersByName,
+  updateUserById,
 };

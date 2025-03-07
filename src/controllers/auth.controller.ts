@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
-import { IUser } from '../models/user_model/user.interface';
+import { IUser } from '../models/userModel/user.interface';
 import { generateAuthTokens, removeToken } from '../services/token.service';
 import { createUser, getUserByEmail } from '../services/user.service';
 import catchAsync from '../utils/catchAsync';

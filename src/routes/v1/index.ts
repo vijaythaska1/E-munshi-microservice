@@ -1,6 +1,8 @@
 import config from '../../config/config';
 import authRoute from './auth.route';
-const express = require('express');
+import studentRoute from './student.route';
+
+import express from 'express';
 
 const router = express.Router();
 
@@ -8,6 +10,10 @@ const defaultRoutes = [
   {
     path: '/auth',
     route: authRoute,
+  },
+  {
+    path: '/mess',
+    route: studentRoute,
   },
 ];
 

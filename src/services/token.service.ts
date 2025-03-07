@@ -1,16 +1,16 @@
-import * as httpStatus from 'http-status';
+import httpStatus from 'http-status';
 import * as jwt from 'jsonwebtoken';
 import moment from 'moment';
 import config from '../config/config';
 
-import { IToken } from '../models/token_model/token.interface';
-import Token from '../models/token_model/token.model';
+import { Token } from '../models/index';
+import { IToken } from '../models/tokenModel/token.interface';
 
+import { ObjectId } from 'mongoose';
+import { tokenTypes } from '../config/tokens';
+import { IUser } from '../models/userModel/user.interface';
 import ApiError from '../utils/ApiError';
 import * as userService from './user.service';
-import { ObjectId } from 'mongoose';
-import { IUser } from '../models/user_model/user.interface';
-const { tokenTypes } = require('../config/tokens');
 
 interface GenerateTokenPayload {
   sub: string;
@@ -168,11 +168,11 @@ const removeToken = async (user: IUser): Promise<IToken | null> => {
 };
 
 export {
-  generateToken,
-  saveToken,
-  verifyToken,
-  removeToken,
   generateAuthTokens,
   generateResetPasswordToken,
+  generateToken,
   generateVerifyEmailToken,
+  removeToken,
+  saveToken,
+  verifyToken,
 };

@@ -1,12 +1,12 @@
-import User from '../models/user_model/user.model';
-import config from './config';
-import { tokenTypes } from './tokens';
 import {
-  Strategy as JwtStrategy,
   ExtractJwt,
+  Strategy as JwtStrategy,
   StrategyOptions,
   VerifiedCallback,
 } from 'passport-jwt';
+import User from '../models/userModel/user.model';
+import config from './config';
+import { tokenTypes } from './tokens';
 
 interface JwtPayload {
   sub: string;

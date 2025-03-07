@@ -1,0 +1,10 @@
+[
+  {
+    "path": "/mesRegister",
+    "method": "post",
+    "middlewares": [
+      "validate:authValidation.register"
+    ],
+    "handler": "createMess"
+  }
+]

@@ -1,8 +1,8 @@
 import ApiError from '../utils/ApiError';
 import pick from '../utils/pick';
 
-import Joi from 'joi';
 import httpStatus from 'http-status';
+import Joi from 'joi';
 
 interface Schema {
   params?: Joi.Schema;

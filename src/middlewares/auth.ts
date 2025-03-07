@@ -1,7 +1,7 @@
-import ApiError from '../utils/ApiError';
-import passport from 'passport';
 import httpStatus from 'http-status';
+import passport from 'passport';
 import { roleRights } from '../config/roles';
+import ApiError from '../utils/ApiError';
 
 const verifyCallback =
   (
@@ -20,7 +20,7 @@ const verifyCallback =
 
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role);
-      const hasRequiredRights = requiredRights.every((requiredRight) =>
+      const hasRequiredRights = userRights && requiredRights.every((requiredRight) =>
         userRights.includes(requiredRight)
       );
       if (!hasRequiredRights) {
