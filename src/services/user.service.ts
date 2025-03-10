@@ -1,8 +1,6 @@
 import httpStatus from 'http-status';
-import { User } from '../models/index';
-import { IUser } from '../models/userModel/user.interface';
-
 import { ObjectId } from 'mongoose';
+import { IUser, User } from '../models/index';
 import ApiError from '../utils/ApiError';
 
 /**
@@ -17,6 +15,23 @@ const createUser = async (userBody: any): Promise<IUser> => {
   }
   const usr = await User.create(userBody);
   return usr.toObject();
+};
+
+
+/**
+ * Query for users
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @returns {Promise<QueryResult>}
+ */
+const queryUsers = async (filter: object, options: { sortBy?: string; limit?: number; page?: number; }): Promise<QueryResult> => {
+  // console.log(filter,options);return
+
+  const users = await User.paginate(filter, options);
+  return users;
 };
 
 /**
@@ -84,6 +99,7 @@ const searchUsersByName = async (
 
 export {
   createUser,
+  queryUsers,
   deleteUserById,
   getUserByAddress,
   getUserByEmail,

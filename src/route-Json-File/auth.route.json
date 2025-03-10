@@ -14,7 +14,7 @@
   {
     "path": "/logout",
     "method": "post",
-    "middlewares": ["auth:logout"],
+    "middlewares": ["auth:logout" ],
     "handler": "logout"
   }
 ]

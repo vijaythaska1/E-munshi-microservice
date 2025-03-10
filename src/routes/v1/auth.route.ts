@@ -14,9 +14,9 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import * as authController from '../../controllers/auth.controller';
 import auth from '../../middlewares/auth';
 import validate from '../../middlewares/validate';
-import * as authController from '../../controllers/auth.controller';
 
 const authRoute = express.Router();
 const middlewareMap: Record<string, any> = { auth, validate };
@@ -27,6 +27,7 @@ const routesFile = path.join(
   '../../route-Json-File/auth.route.json'
 );
 const routesData = JSON.parse(fs.readFileSync(routesFile, 'utf8'));
+console.log('🚀 ~ routesData:', routesData);
 
 routesData.forEach(
   (route: {
@@ -47,6 +48,9 @@ routesData.forEach(
       const handler = handlerMap[route.handler];
       if (handler) {
         (authRoute as any)[route.method](route.path, ...middlewares, handler);
+        // console.log(
+        //   (authRoute as any)[route.method](route.path, ...middlewares, handler)
+        // );
       } else {
         console.warn(
           `❌ Handler '${route.handler}' not found for route ${route.path}`

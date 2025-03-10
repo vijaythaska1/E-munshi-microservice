@@ -7,7 +7,7 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  "files.autoSave": "onFocusChange", // Auto-save files when switching focus
+  // "files.autoSave": "afterDelay", // Auto-save files when switching focus
   "files.trimTrailingWhitespace": true, // Remove trailing spaces on save
   "files.insertFinalNewline": true, // Ensure file ends with a newline
   "files.exclude": {
@@ -36,6 +36,7 @@
   "cSpell.words": [
     "Aadhar",
     "allsubscribe",
+    "emunshi",
     "Idby",
     "prefs"
   ] // Set console font size

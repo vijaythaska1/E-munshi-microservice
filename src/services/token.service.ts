@@ -1,14 +1,10 @@
 import httpStatus from 'http-status';
 import * as jwt from 'jsonwebtoken';
 import moment from 'moment';
-import config from '../config/config';
-
-import { Token } from '../models/index';
-import { IToken } from '../models/tokenModel/token.interface';
-
 import { ObjectId } from 'mongoose';
+import config from '../config/config';
 import { tokenTypes } from '../config/tokens';
-import { IUser } from '../models/userModel/user.interface';
+import { IToken, IUser, Token } from '../models/index';
 import ApiError from '../utils/ApiError';
 import * as userService from './user.service';
 

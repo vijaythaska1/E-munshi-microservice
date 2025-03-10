@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { app } from './app';
 import config from './config/config';
 import logger from './config/logger';
-
+ const PORT = config.port;
 // @ts-ignore
 
 const main = async () => {
@@ -19,8 +19,8 @@ const main = async () => {
       console.log('--error connecting to database---', err);
     });
 
-  server = app.listen(8080, () => {
-    logger.info(`Listening to port 8080`);
+  server = app.listen(PORT, () => {
+    logger.info(`Listening to port ${PORT}`);
   });
 
   const exitHandler = () => {
