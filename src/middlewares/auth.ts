@@ -1,16 +1,38 @@
-import httpStatus from 'http-status';
 import passport from 'passport';
-import { roleRights } from '../config/roles';
+import httpStatus from 'http-status';
+import { Request, Response, NextFunction } from 'express';
 import ApiError from '../utils/ApiError';
+import { roleRights } from '../config/roles';
+
+interface User {
+  id: string;
+  role: string;
+  [key: string]: any;
+}
+
+// Extend Express Request interface to include user property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
+
+type VerifyCallback = (
+  err: any,
+  user: User | false | null,
+  info: any
+) => void | Promise<void>;
 
 const verifyCallback =
   (
-    req: { user: any },
-    resolve: (value?: unknown) => void,
-    reject: { (reason?: any): void; (arg0: ApiError): any },
-    requiredRights: any[]
-  ) =>
-  async (err: any, user: { role: any }, info: any) => {
+    req: Request,
+    resolve: () => void,
+    reject: (error: ApiError) => void,
+    requiredRights: string[]
+  ): VerifyCallback =>
+  async (err, user, info) => {
     if (err || info || !user) {
       return reject(
         new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate')
@@ -20,10 +42,10 @@ const verifyCallback =
 
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role);
-      const hasRequiredRights = userRights && requiredRights.every((requiredRight) =>
+      const hasRequiredRights = requiredRights.every((requiredRight) =>
         userRights.includes(requiredRight)
       );
-      if (!hasRequiredRights) {
+      if (!hasRequiredRights && req.params.userId !== user.id) {
         return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
       }
     }
@@ -33,15 +55,15 @@ const verifyCallback =
 
 const auth =
   (...requiredRights: string[]) =>
-  async (req: { user: any }, res: any, next: (arg0: undefined) => any) => {
-    return new Promise((resolve, reject) => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
       passport.authenticate(
         'jwt',
         { session: false },
         verifyCallback(req, resolve, reject, requiredRights)
       )(req, res, next);
     })
-      .then(() => next(undefined))
+      .then(() => next())
       .catch((err) => next(err));
   };
 

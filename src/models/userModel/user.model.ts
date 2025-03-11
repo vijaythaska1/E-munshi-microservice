@@ -4,11 +4,12 @@ import validator from 'validator';
 import { roles, subscribe, userStatus } from '../../config/roles';
 import { paginate, toJSON } from '../plugins';
 // import { UNAVAILABLE_FOR_LEGAL_REASONS } from "http-status";
+import logger from '../../config/logger';
 import { IUser, UserModel } from './user.interface';
 
 const userSchema = new mongoose.Schema<IUser, UserModel>({
   role: {
-    type: String,
+    type: Number,
     required: [true, 'role is required'],
     enum: roles,
   },
@@ -42,6 +43,13 @@ const userSchema = new mongoose.Schema<IUser, UserModel>({
     },
     private: true,
   },
+
+  messId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'User',
+    default: null,
+  },
+
   phoneNumber: {
     countryCode: {
       type: String,
@@ -167,6 +175,7 @@ userSchema.statics.isEmailTaken = async function (
   email: string,
   excludeUserId?: string
 ) {
+  logger.info('isEmailTaken');
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
 };
@@ -178,6 +187,12 @@ userSchema.statics.isEmailTaken = async function (
 //   const user = await this.findOne({ userName, _id: { $ne: excludeUserId } });
 //   return !!user;
 // };
+
+/**
+ *
+ * @param {string} password
+ * @returns
+ */
 
 userSchema.methods.isPasswordMatch = async function (password: string) {
   const user = this as IUser;

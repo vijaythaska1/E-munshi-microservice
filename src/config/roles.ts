@@ -1,6 +1,6 @@
 const allRoles = {
   0: 'admin',
-  1: 'user',
+  1: 'mess',
   2: 'student',
 };
 

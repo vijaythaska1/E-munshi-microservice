@@ -2,6 +2,7 @@ import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
 import mongoSanitize from 'express-mongo-sanitize';
+import { fileParser } from 'express-multipart-file-parser';
 import helmet from 'helmet';
 import httpStatus from 'http-status';
 import passport from 'passport';
@@ -11,11 +12,9 @@ import {
   successHandler,
 } from './config/morgan';
 import { jwtStrategy } from './config/passport';
-import ApiError from './utils/ApiError';
-// import { authLimiter } from "./middlewares/rateLimiter";
-import { fileParser } from 'express-multipart-file-parser';
 import { errorConverter, errorHandler } from './middlewares/error';
 import routes from './routes/v1';
+import ApiError from './utils/ApiError';
 
 const app = express();
 
@@ -57,15 +56,14 @@ passport.use('jwt', jwtStrategy);
 
 // limit repeated failed requests to auth endpoints
 // if (config.env === "production") {
-//   app.use("/v1/auth", authLimiter);
+// app.use("/v1/auth"authRateLimiter);
 // }
 
 // v1 api routes
 app.use('/v1', routes);
 
-
 // send back a 404 error for any unknown api request
-app.use((next: express.NextFunction) => {
+app.use((req, res, next: express.NextFunction) => {
   next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
 

@@ -110,7 +110,7 @@ const verifyEmail = async (verifyEmailToken: string): Promise<any> => {
   }
 };
 
-module.exports = {
+export default {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,

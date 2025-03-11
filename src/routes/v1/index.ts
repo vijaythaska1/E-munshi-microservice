@@ -1,5 +1,7 @@
 import config from '../../config/config';
 import authRoute from './auth.route';
+import studentRoute from './student.route';
+import messRoute from './mess.route';
 
 import express from 'express';
 
@@ -10,10 +12,14 @@ const defaultRoutes = [
     path: '/auth',
     route: authRoute,
   },
-  // {
-  //   path: '/mess',
-  //   route: studentRoute,
-  // },
+  {
+    path: '/student',
+    route: studentRoute,
+  },
+  {
+    path: '/mess',
+    route: messRoute,
+  },
 ];
 
 const devRoutes = [];

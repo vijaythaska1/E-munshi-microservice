@@ -1,38 +1,45 @@
+import { NextFunction, Request, Response } from 'express';
+import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 import config from '../config/config';
 import logger from '../config/logger';
 import ApiError from '../utils/ApiError';
-
-import mongoose from 'mongoose';
-import httpStatus from 'http-status';
-import { Request, Response, NextFunction } from 'express';
+import { error } from '../utils/responseManager';
 
 const errorConverter = (
-  err: any,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
-  let error = err;
-  console.log(req, res);
+  let convertedError = err;
 
-  if (!(error instanceof ApiError)) {
+  if (!(convertedError instanceof ApiError)) {
     const statusCode =
-      error.statusCode || error instanceof mongoose.Error
-        ? httpStatus.BAD_REQUEST
-        : httpStatus.INTERNAL_SERVER_ERROR;
-    const message = error.message || (httpStatus[statusCode] as string);
-    error = new ApiError(statusCode, message, false, err.stack);
+      'statusCode' in convertedError
+        ? (convertedError as any).statusCode
+        : convertedError instanceof mongoose.Error
+          ? httpStatus.BAD_REQUEST
+          : httpStatus.INTERNAL_SERVER_ERROR;
+
+    const message = convertedError.message || httpStatus[statusCode];
+    convertedError = new ApiError(statusCode, message, false, err.stack);
   }
-  next(error);
+
+  next(convertedError);
 };
 
-const errorHandler = (err, res: Response): void => {
+// eslint-disable-next-line no-unused-vars
+const errorHandler = (
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let { statusCode, message } = err;
-
-  // console.log("🚀 ~ file: error.ts:24 ~ errorHandler ~ message:", message);
   if (config.env === 'production' && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
-    message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR] as string;
+    message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
   }
 
   res.locals.errorMessage = err.message;
@@ -46,8 +53,7 @@ const errorHandler = (err, res: Response): void => {
   if (config.env === 'development') {
     logger.error(err);
   }
-
-  res.status(statusCode).send(response);
+  return error(res, statusCode, response?.message);
 };
 
 export { errorConverter, errorHandler };

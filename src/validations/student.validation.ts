@@ -3,9 +3,8 @@ import { objectId } from './custom.validation';
 
 const createStudent = {
   body: Joi.object().keys({
-    role: Joi.number().required().valid(2).messages({
+    role: Joi.number().valid(2).default(2).messages({
       'any.only': 'invalid role value provided',
-      'any.required': 'Role is required',
     }),
     email: Joi.string().email().required().messages({
       'string.email': 'Email must be a valid email address',
@@ -28,7 +27,9 @@ const createStudent = {
           'any.required': 'Country code is required',
         }),
     }),
-
+    messId: Joi.string().custom(objectId).required().messages({
+      'any.required': 'Mess ID is required',
+    }),
     details: Joi.object()
       .keys({
         rollNo: Joi.string().required().messages({
@@ -57,6 +58,9 @@ const createStudent = {
         }),
         endDate: Joi.date().optional().messages({
           'date.base': 'End date must be a valid date',
+        }),
+        image: Joi.string().required().messages({
+          'any.required': 'image name is required',
         }),
         // subscribe: Joi.number()
         //   .valid(0, 1, 2, 3)
@@ -174,10 +178,4 @@ const deleteUser = {
   }),
 };
 
-module.exports = {
-  createStudent,
-  getIdByStudent,
-  getStudent,
-  updateStudent,
-  deleteUser,
-};
+export { createStudent, deleteUser, getIdByStudent, getStudent, updateStudent };

@@ -12,11 +12,11 @@ import ApiError from '../utils/ApiError';
 const createUser = async (userBody: any): Promise<IUser> => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    //  return failed(res, httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  const usr = await User.create(userBody);
-  return usr.toObject();
+  const user = await User.create(userBody);
+  return user;
 };
-
 
 /**
  * Query for users
@@ -25,9 +25,12 @@ const createUser = async (userBody: any): Promise<IUser> => {
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
  * @param {number} [options.limit] - Maximum number of results per page (default = 10)
  * @param {number} [options.page] - Current page (default = 1)
- * @returns {Promise<QueryResult>}
+ * @returns {Promise<any>}
  */
-const queryUsers = async (filter: object, options: { sortBy?: string; limit?: number; page?: number; }): Promise<QueryResult> => {
+const queryUsers = async (
+  filter: object,
+  options: { sortBy?: string; limit?: number; page?: number }
+): Promise<any> => {
   // console.log(filter,options);return
 
   const users = await User.paginate(filter, options);
@@ -46,13 +49,18 @@ const getUserById = async (id: ObjectId): Promise<IUser> => {
 /**
  * Get user by email
  * @param {string} email
- * @returns {Promise<User>}
+ * @returns {Promise<IUser>}
  */
 const getUserByEmail = async (email: string): Promise<IUser> => {
-  const data: any = User.findOne({ email });
+  const data: any = User.findOne({ email, role: 1, isDeleted: false }).lean();
   return data;
 };
 
+/**
+ * Get user by address
+ * @param {string} address
+ * @returns {Promise<IUser>}
+ */
 const getUserByAddress = async (address: any) => {
   return User.findOne({ address }).lean();
 };
@@ -99,11 +107,11 @@ const searchUsersByName = async (
 
 export {
   createUser,
-  queryUsers,
   deleteUserById,
   getUserByAddress,
   getUserByEmail,
   getUserById,
+  queryUsers,
   searchUsersByName,
   updateUserById,
 };

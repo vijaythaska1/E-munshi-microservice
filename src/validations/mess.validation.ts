@@ -1,11 +1,10 @@
 import Joi from 'joi';
-import { password, objectId } from './custom.validation';
+import { objectId, password } from './custom.validation';
 
 const createMess = {
   body: Joi.object().keys({
-    role: Joi.number().required().valid(1).messages({
+    role: Joi.number().valid(1).default(1).messages({
       'any.only': 'invalid role value provided',
-      'any.required': 'Role is required',
     }),
     email: Joi.string().email().required().messages({
       'string.email': 'Email must be a valid email address',
@@ -121,7 +120,7 @@ const deleteUser = {
   }),
 };
 
-module.exports = {
+export {
   createMess,
   getUsers,
   getUser,

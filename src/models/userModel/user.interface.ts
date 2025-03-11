@@ -1,4 +1,4 @@
-import { Document, Model } from 'mongoose';
+import { Document, Model, Types } from 'mongoose';
 
 export interface IPhoneNumber {
   countryCode: string;
@@ -21,7 +21,7 @@ export interface IUserDetails {
 }
 
 export interface IUser extends Document {
-  role: string;
+  role: number;
   email: string;
   isEmailVerified?: boolean;
   password?: string;
@@ -29,10 +29,15 @@ export interface IUser extends Document {
   status?: number;
   isDeleted: boolean;
   authToken: string;
+  messId: Types.ObjectId | null;
   details: IUserDetails;
   isPasswordMatch(password: string): Promise<boolean>;
 }
 
 export interface UserModel extends Model<IUser> {
+  paginate(
+    filter: object,
+    options: { sortBy?: string; limit?: number; page?: number }
+  ): unknown;
   isEmailTaken(email: string, excludeUserId?: string): Promise<boolean>;
 }

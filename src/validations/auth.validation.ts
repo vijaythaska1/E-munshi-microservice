@@ -13,8 +13,8 @@ const register = {
 
 const login = {
   body: Joi.object().keys({
-    password: Joi.string().required(),
     email: Joi.string().required().email(),
+    password: Joi.string().required(),
   }),
 };
 
